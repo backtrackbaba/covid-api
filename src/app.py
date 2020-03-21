@@ -55,7 +55,7 @@ def country(country_iso):
 
 
 @app.route('/api/v1/country/<country_iso>/<date>')
-# @cache.cached(timeout=86400)
+@cache.cached(timeout=86400)
 def country_date(country_iso, date):
     result = Records.query.filter(Records.country_iso == country_iso).filter(Records.date == date).first()
     data = {
