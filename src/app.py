@@ -1,6 +1,11 @@
+import json
 import os
+import time
+import uuid
 
+import requests
 from flask import Flask
+from flask_basicauth import BasicAuth
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
@@ -15,6 +20,8 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 CORS(app)
+basic_auth = BasicAuth(app)
+
 redis_db = Database(host=os.environ.get('CACHE_REDIS_HOST'), port=os.environ.get('CACHE_REDIS_PORT'),
                     db=os.environ.get('CACHE_REDIS_DB'), password=os.environ.get('CACHE_REDIS_PASSWORD'))
 cache = redis_db.cache()
@@ -133,3 +140,46 @@ def world_date_window(from_date, to_date):
             "recovered": abs(from_date_recovered_count - to_date_recovered_count)}
     }
     return data
+
+
+@app.route('/protected/update-db')
+@basic_auth.required
+def update_db():
+    t1 = time.time()
+    # Fetch the latest dataset
+    MASTER_DATA_URL = "https://pomber.github.io/covid19/timeseries.json"
+    master_data_json = requests.get(MASTER_DATA_URL).json()
+    countries = list(master_data_json.keys())
+
+    with open('/opt/projects/covid/covid-api/src/data/country_name_to_iso.json', 'r') as fp:
+        country_name_to_code = json.loads(fp.read())
+
+    db.session.query(Records).delete()
+    db.session.commit()
+
+    for country in countries:
+        for everyday in master_data_json[country]:
+            record = Records()
+            record.uuid = uuid.uuid4()
+            record.country_name = country
+            record.country_iso = country_name_to_code.get(country)
+            record.date = everyday["date"]
+            record.confirmed = everyday["confirmed"]
+            record.deaths = everyday["deaths"]
+            record.recovered = everyday["recovered"]
+            db.session.add(record)
+            print("Record Object", record)
+            db.session.commit()
+            print(record)
+            print(f"Successfully added record for {country}")
+
+    redis_db.flushdb()
+
+    return f"Added records in {time.time() - t1} seconds!"
+
+
+@app.route('/protected/clear-redis')
+@basic_auth.required
+def clear_redis():
+    redis_db.flushdb()
+    return "Cleared Redis!!!"

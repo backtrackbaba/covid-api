@@ -9,3 +9,6 @@ class Config(object):
         db=os.environ.get('POSTGRESQL_DATABASE'))
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    BASIC_AUTH_USERNAME = os.environ.get('BASIC_AUTH_USERNAME')
+    BASIC_AUTH_PASSWORD = os.environ.get('BASIC_AUTH_PASSWORD')
