@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import DATE, UUID
@@ -10,10 +11,9 @@ from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
-
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
+CORS(app)
 redis_db = Database(host=os.environ.get('CACHE_REDIS_HOST'), port=os.environ.get('CACHE_REDIS_PORT'),
                     db=os.environ.get('CACHE_REDIS_DB'), password=os.environ.get('CACHE_REDIS_PASSWORD'))
 cache = redis_db.cache()
