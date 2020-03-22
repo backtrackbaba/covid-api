@@ -151,7 +151,7 @@ def update_db():
     master_data_json = requests.get(MASTER_DATA_URL).json()
     countries = list(master_data_json.keys())
 
-    with open('/opt/projects/covid/covid-api/src/data/country_name_to_iso.json', 'r') as fp:
+    with open('../data/country_name_to_iso.json', 'r') as fp:
         country_name_to_code = json.loads(fp.read())
 
     db.session.query(Records).delete()
