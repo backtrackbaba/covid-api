@@ -4,7 +4,7 @@ import time
 import uuid
 
 import requests
-from flask import Flask
+from flask import Flask, render_template
 from flask_basicauth import BasicAuth
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -44,8 +44,9 @@ class Records(db.Model):
 
 
 @app.route('/')
+@cache.cached(timeout=86400)
 def home():
-    return 'It works!!!'
+    return render_template('index.html')
 
 
 @app.route('/api/v1/country/<country_iso>')
