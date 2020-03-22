@@ -4,6 +4,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
 from sqlalchemy.dialects.postgresql import DATE, UUID
 from walrus import Database
 
@@ -64,4 +65,71 @@ def country_date(country_iso, date):
     }
     data['result'][result.date.strftime('%Y-%m-%d')] = {"confirmed": result.confirmed, "deaths": result.deaths,
                                                         "recovered": result.recovered}
+    return data
+
+
+@app.route('/api/v1/global')
+@cache.cached(timeout=86400)
+def world():
+    date = Records.query.filter(Records.country_iso == "IND").order_by(desc(Records.date)).first().date
+    results = Records.query.filter(Records.date == date).all()
+    global_confirmed_count, global_death_count, global_recovered_count = 0, 0, 0
+    for result in results:
+        global_confirmed_count += result.confirmed
+        global_death_count += result.deaths
+        global_recovered_count += result.recovered
+    data = {
+        'count': 1,
+        'date': date,
+        'result': {"confirmed": global_confirmed_count, "deaths": global_death_count,
+                   "recovered": global_recovered_count}
+    }
+    return data
+
+
+@app.route('/api/v1/global/<date>')
+@cache.cached(timeout=86400)
+def world_date(date):
+    results = Records.query.filter(Records.date == date).all()
+    global_confirmed_count, global_death_count, global_recovered_count = 0, 0, 0
+    for result in results:
+        global_confirmed_count += result.confirmed
+        global_death_count += result.deaths
+        global_recovered_count += result.recovered
+    data = {
+        'count': 1,
+        'date': date,
+        'result': {"confirmed": global_confirmed_count, "deaths": global_death_count,
+                   "recovered": global_recovered_count}
+    }
+    return data
+
+
+@app.route('/api/v1/global/<from_date>/<to_date>')
+@cache.cached(timeout=86400)
+def world_date_window(from_date, to_date):
+    from_date_result = Records.query.filter(Records.date == from_date).all()
+    to_date_result = Records.query.filter(Records.date == to_date).all()
+    from_date_confirmed_count, from_date_death_count, from_date_recovered_count = 0, 0, 0
+    to_date_confirmed_count, to_date_death_count, to_date_recovered_count = 0, 0, 0
+
+    for result in from_date_result:
+        from_date_confirmed_count += result.confirmed
+        from_date_death_count += result.deaths
+        from_date_recovered_count += result.recovered
+
+    for result in to_date_result:
+        to_date_confirmed_count += result.confirmed
+        to_date_death_count += result.deaths
+        to_date_recovered_count += result.recovered
+
+    data = {
+        'count': 1,
+        'from_date': from_date,
+        'to_date': to_date,
+        'result': {
+            "confirmed": abs(from_date_confirmed_count - to_date_confirmed_count),
+            "deaths": abs(from_date_death_count - to_date_death_count),
+            "recovered": abs(from_date_recovered_count - to_date_recovered_count)}
+    }
     return data
