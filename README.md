@@ -24,6 +24,9 @@ The datasets are updated thrice a day. As of now, we manually trigger the updati
 # Documentation
 Postman collection has been created along with documentation for you to get started with this project. Docs can be found [here](https://documenter.getpostman.com/view/2568274/SzS8rjbe?version=latest)
 
+# Local Setup
+To be added
+
 # Sources
 
 [Novel Coronavirus (COVID-19) Cases, provided by JHU CSSE](https://github.com/CSSEGISandData/COVID-19)
