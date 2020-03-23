@@ -104,17 +104,19 @@ def get_country_time_series(country_iso, from_date, to_date):
 @app.route('/api/v1/global/timeseries/<from_date>/<to_date>')
 @cache.cached(timeout=86400, metrics=True)
 def global_timeseries(from_date, to_date):
-    data = {}
+    result = {}
     country_list = Records.query.distinct(Records.country_iso).all()
+    data = {
+        'count': len(country_list),
+        'result': result
+    }
     for country in country_list:
         country_result = get_country_time_series(country.country_iso, from_date, to_date)
         data_list = []
         for entry in country_result:
-            for result in country_result:
-                data_list.append({"date": str(result.date), "confirmed": result.confirmed, "deaths": result.deaths,
-                                  "recovered": result.recovered})
-        data[country.country_iso] = data_list
-    data['count'] = len(country_list)
+            data_list.append({"date": str(entry.date), "confirmed": entry.confirmed, "deaths": entry.deaths,
+                              "recovered": entry.recovered})
+        result[country.country_iso] = data_list
     return data
 
 
