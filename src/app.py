@@ -55,7 +55,7 @@ def home():
 @app.route('/api/v1/country/<country_iso>')
 @cache.cached(timeout=86400, metrics=True)
 def country(country_iso):
-    result = Records.query.filter_by(country_iso=country_iso).all()
+    result = Records.query.filter_by(country_iso=country_iso.upper()).all()
     data = {
         'count': len(result),
         'result': {}
@@ -69,7 +69,7 @@ def country(country_iso):
 @app.route('/api/v1/country/<country_iso>/<date>')
 @cache.cached(timeout=86400, metrics=True)
 def country_date(country_iso, date):
-    result = fetch_country_on_date(country_iso, date)
+    result = fetch_country_on_date(country_iso.upper(), date)
     data = {
         'count': 1,
         'result': {}
@@ -82,7 +82,7 @@ def country_date(country_iso, date):
 @app.route('/api/v1/country/<country_iso>/timeseries/<from_date>/<to_date>')
 @cache.cached(timeout=86400, metrics=True)
 def country_timeseries(country_iso, from_date, to_date):
-    results = get_country_time_series(country_iso, from_date, to_date)
+    results = get_country_time_series(country_iso.upper, from_date, to_date)
     data_list = []
     for result in results:
         data_list.append({"date": str(result.date), "confirmed": result.confirmed, "deaths": result.deaths,
@@ -118,6 +118,11 @@ def global_timeseries(from_date, to_date):
                               "recovered": entry.recovered})
         result[country.country_iso] = data_list
     return data
+
+
+@app.route('/sai')
+def sai():
+    redis_db.set('last_updated', 12345)
 
 
 @cache.cached(timeout=86400, metrics=True)
