@@ -82,7 +82,8 @@ def country_date(country_iso, date):
 @app.route('/api/v1/country/<country_iso>/timeseries/<from_date>/<to_date>')
 @cache.cached(timeout=86400, metrics=True)
 def country_timeseries(country_iso, from_date, to_date):
-    results = get_country_time_series(country_iso.upper, from_date, to_date)
+    results = Records.query.filter(Records.country_iso == country_iso).filter(
+        and_(Records.date >= from_date, Records.date < to_date)).order_by(asc(Records.date)).all()
     data_list = []
     for result in results:
         data_list.append({"date": str(result.date), "confirmed": result.confirmed, "deaths": result.deaths,
