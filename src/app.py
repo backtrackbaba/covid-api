@@ -217,7 +217,10 @@ def update_db():
             record.date = everyday["date"]
             record.confirmed = everyday["confirmed"]
             record.deaths = everyday["deaths"]
-            record.recovered = everyday["recovered"]
+            if not record.recovered:
+                record.recovered = 0
+            else:
+                record.recovered = everyday["recovered"]
             db.session.add(record)
             print("Record Object", record)
             db.session.commit()
