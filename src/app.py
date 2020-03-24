@@ -120,11 +120,6 @@ def global_timeseries(from_date, to_date):
     return data
 
 
-@app.route('/sai')
-def sai():
-    redis_db.set('last_updated', 12345)
-
-
 @cache.cached(timeout=86400, metrics=True)
 def fetch_country_on_date(country_iso, date):
     return Records.query.filter(Records.country_iso == country_iso).filter(Records.date == date).first()

@@ -149,7 +149,9 @@
   "Zambia": "ZMB",
   "Djibouti": "DJI",
   "Gambia, The": "GMB",
+  "Gambia": "GMB",
   "Bahamas, The": "BHS",
+  "Bahamas": "BHS",
   "Chad": "TCD",
   "El Salvador": "SLV",
   "Fiji": "FJI",
@@ -169,5 +171,6 @@
   "Grenada": "GRD",
   "Mozambique": "MOZ",
   "Timor-Leste": "TLS",
-  "Eritrea": "ERI"
+  "Eritrea": "ERI",
+  "Belize": "BLZ"
 }
