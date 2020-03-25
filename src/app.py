@@ -199,6 +199,20 @@ def latest_date():
     return str(latest_date)
 
 
+@app.route('/api/v1/country/<country_iso>/latest')
+def country_latest(country_iso):
+    latest_date = Records.query.filter(Records.country_iso == "IND").order_by(desc(Records.date)).first().date
+    result = fetch_country_on_date(country_iso, latest_date)
+
+    data = {
+        'count': 1,
+        'result': {}
+    }
+    data['result'][result.date.strftime('%Y-%m-%d')] = {"confirmed": result.confirmed, "deaths": result.deaths,
+                                                        "recovered": result.recovered}
+    return data
+
+
 @app.route('/protected/update-db')
 @basic_auth.required
 def update_db():

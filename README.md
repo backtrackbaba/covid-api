@@ -24,6 +24,21 @@ The datasets are updated thrice a day. As of now, we manually trigger the updati
 # Documentation
 Postman collection has been created along with documentation for you to get started with this project. Docs can be found [here](https://documenter.getpostman.com/view/2568274/SzS8rjbe?version=latest)
 
+
+# Examples
+
+1) How do I get the global data on any given day?
+    
+   You could use the [`/api/v1/global/2020-03-15`](https://covidapi.info/api/v1/global/2020-03-15) endpoint
+
+2) How do I get the data for a country in a date-range?
+
+    Ex: To get the data for India between 10th and 19th March 2020, you could use [`/api/v1/country/IND/timeseries/2020-03-10/2020-03-19`](https://covidapi.info/api/v1/country/IND/timeseries/2020-03-10/2020-03-19)
+
+3) How do I get the data for the last record for a country?
+    
+    Ex: You'll need to get the last date for any country by hitting the [`/api/v1/latest-date`](https://covidapi.info/api/v1/latest-date) endpoint and then use that date to query the country endpoint like this [`/api/v1/country/IND/2020-03-15`](https://covidapi.info/api/v1/country/IND/2020-03-15) 
+
 # Local Setup
 To be added
 
