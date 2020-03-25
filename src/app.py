@@ -213,6 +213,37 @@ def country_latest(country_iso):
                                                         "recovered": result.recovered}
     return data
 
+@cache.cached(timeout=86400, metrics=True)
+def global_count_on_date(date):
+    dates = Records.query.filter(Records.date == date).all()
+    latest_date = Records.query.filter(Records.country_iso == "IND").order_by(desc(Records.date)).first().date
+    print(dates)
+    return dates
+
+@cache.cached(timeout=86400, metrics=True)
+@app.route('/api/v1/global/count')
+def global_count():
+    dates = Records.query.distinct(Records.date).all()
+    date_result = {}
+    for entry in dates:
+        date = entry.date
+        results = global_count_on_date(date)
+        global_confirmed_count, global_death_count, global_recovered_count = 0, 0, 0
+        for result in results:
+            global_confirmed_count += result.confirmed
+            global_death_count += result.deaths
+            global_recovered_count += result.recovered
+        date_result[str(date)] = {
+            "confirmed": global_confirmed_count,
+            "deaths": global_death_count,
+            "recovered": global_recovered_count
+        }
+    data = {
+        "count": len(date_result),
+        "result": date_result
+    }
+    return data
+
 
 @app.route('/protected/update-db')
 @basic_auth.required
