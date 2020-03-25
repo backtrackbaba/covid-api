@@ -193,6 +193,12 @@ def world_date_window(from_date, to_date):
     return data
 
 
+@app.route('/api/v1/latest-date')
+def latest_date():
+    latest_date = Records.query.filter(Records.country_iso == "IND").order_by(desc(Records.date)).first().date
+    return str(latest_date)
+
+
 @app.route('/protected/update-db')
 @basic_auth.required
 def update_db():
