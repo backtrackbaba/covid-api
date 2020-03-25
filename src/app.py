@@ -194,16 +194,17 @@ def world_date_window(from_date, to_date):
 
 
 @app.route('/api/v1/latest-date')
+@cache.cached(timeout=86400, metrics=True)
 def latest_date():
     latest_date = Records.query.filter(Records.country_iso == "IND").order_by(desc(Records.date)).first().date
     return str(latest_date)
 
 
 @app.route('/api/v1/country/<country_iso>/latest')
+@cache.cached(timeout=86400, metrics=True)
 def country_latest(country_iso):
     latest_date = Records.query.filter(Records.country_iso == "IND").order_by(desc(Records.date)).first().date
     result = fetch_country_on_date(country_iso, latest_date)
-
     data = {
         'count': 1,
         'result': {}
