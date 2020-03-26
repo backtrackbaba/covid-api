@@ -139,7 +139,7 @@ def world():
         global_recovered_count += result.recovered
     data = {
         'count': 1,
-        'date': date,
+        'date': str(date),
         'result': {"confirmed": global_confirmed_count, "deaths": global_death_count,
                    "recovered": global_recovered_count}
     }
