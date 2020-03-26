@@ -248,6 +248,24 @@ def global_count():
     return data
 
 
+@cache.cached(timeout=86400, metrics=True)
+@app.route('/api/v1/global/latest')
+def global_latest():
+    latest_date = Records.query.filter(Records.country_iso == "IND").order_by(desc(Records.date)).first().date
+    results = global_count_on_date(latest_date)
+    data = {
+        'count': len(results),
+        'result': [],
+        'date': str(latest_date)
+    }
+    for result in results:
+        country_data = {}
+        country_data[result.country_iso] = {"confirmed": result.confirmed, "deaths": result.deaths,
+                                            "recovered": result.recovered}
+        data['result'].append(country_data)
+    return data
+
+
 @app.route('/protected/update-db')
 @basic_auth.required
 def update_db():
