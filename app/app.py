@@ -111,6 +111,7 @@ def global_timeseries(from_date, to_date):
         'count': len(country_list),
         'result': result
     }
+
     for country in country_list:
         country_result = get_country_time_series(country.country_iso, from_date, to_date)
         data_list = []
@@ -138,7 +139,7 @@ def world():
         global_recovered_count += result.recovered
     data = {
         'count': 1,
-        'date': date,
+        'date': str(date),
         'result': {"confirmed": global_confirmed_count, "deaths": global_death_count,
                    "recovered": global_recovered_count}
     }
@@ -213,12 +214,14 @@ def country_latest(country_iso):
                                                         "recovered": result.recovered}
     return data
 
+
 @cache.cached(timeout=86400, metrics=True)
 def global_count_on_date(date):
     dates = Records.query.filter(Records.date == date).all()
     latest_date = Records.query.filter(Records.country_iso == "IND").order_by(desc(Records.date)).first().date
     print(dates)
     return dates
+
 
 @cache.cached(timeout=86400, metrics=True)
 @app.route('/api/v1/global/count')
@@ -242,6 +245,24 @@ def global_count():
         "count": len(date_result),
         "result": date_result
     }
+    return data
+
+
+@cache.cached(timeout=86400, metrics=True)
+@app.route('/api/v1/global/latest')
+def global_latest():
+    latest_date = Records.query.filter(Records.country_iso == "IND").order_by(desc(Records.date)).first().date
+    results = global_count_on_date(latest_date)
+    data = {
+        'count': len(results),
+        'result': [],
+        'date': str(latest_date)
+    }
+    for result in results:
+        country_data = {}
+        country_data[result.country_iso] = {"confirmed": result.confirmed, "deaths": result.deaths,
+                                            "recovered": result.recovered}
+        data['result'].append(country_data)
     return data
 
 
@@ -270,10 +291,7 @@ def update_db():
             record.date = everyday["date"]
             record.confirmed = everyday["confirmed"]
             record.deaths = everyday["deaths"]
-            if not record.recovered:
-                record.recovered = 0
-            else:
-                record.recovered = everyday["recovered"]
+            record.recovered = everyday["recovered"] or 0
             db.session.add(record)
             print("Record Object", record)
             db.session.commit()
