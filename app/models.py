@@ -1,6 +1,6 @@
 from sqlalchemy.dialects.postgresql import DATE, UUID
 
-from src.app import db
+from app import db
 
 
 class Records(db.Model):
