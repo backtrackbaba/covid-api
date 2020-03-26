@@ -111,6 +111,7 @@ def global_timeseries(from_date, to_date):
         'count': len(country_list),
         'result': result
     }
+
     for country in country_list:
         country_result = get_country_time_series(country.country_iso, from_date, to_date)
         data_list = []
@@ -213,12 +214,14 @@ def country_latest(country_iso):
                                                         "recovered": result.recovered}
     return data
 
+
 @cache.cached(timeout=86400, metrics=True)
 def global_count_on_date(date):
     dates = Records.query.filter(Records.date == date).all()
     latest_date = Records.query.filter(Records.country_iso == "IND").order_by(desc(Records.date)).first().date
     print(dates)
     return dates
+
 
 @cache.cached(timeout=86400, metrics=True)
 @app.route('/api/v1/global/count')
@@ -270,10 +273,7 @@ def update_db():
             record.date = everyday["date"]
             record.confirmed = everyday["confirmed"]
             record.deaths = everyday["deaths"]
-            if not record.recovered:
-                record.recovered = 0
-            else:
-                record.recovered = everyday["recovered"]
+            record.recovered = everyday["recovered"] or 0
             db.session.add(record)
             print("Record Object", record)
             db.session.commit()
