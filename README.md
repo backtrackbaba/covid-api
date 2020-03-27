@@ -69,7 +69,20 @@ cd path/to/cloned/project
 flask run
 ```
 
+### Seeding the database
+Once the local instance of flask is up and running, you could use the `/protected/update-db` endpoint to start with the seeding of the database
 
+### Updating the database
+Same as what you did seeding the database, you'll need to hit the same endpoint to start updating the DB with the latest data
+
+### Debugging
+
+While developing an endpoint, you could remove the cache decorator from the endpoint and enable it once the whole endpoint is up and running. Changes have been made in v2 to ensure this thing is taken care of automatically in local environment.
+
+While hitting any global endpoints which, you might get into `TypeError` which is usually caused when JHU, the data provider changes names of any of the countries in the data or add a name which isn't in the `country_name_to_iso.json` file. You could simply add the same into the file and update the database again
+
+
+Please open an issue if you get into some other problem and aren't able to figure out why it happened. I'll be glad to discuss any design decisions that you might come across in the code.
 
 # Sources
 
