@@ -40,7 +40,36 @@ Postman collection has been created along with documentation for you to get star
     Ex: You'll need to get the last date for any country by hitting the [`/api/v1/latest-date`](https://covidapi.info/api/v1/latest-date) endpoint and then use that date to query the country endpoint like this [`/api/v1/country/IND/2020-03-15`](https://covidapi.info/api/v1/country/IND/2020-03-15) 
 
 # Local Setup
-To be added
+
+### Clone the repo locally
+`git clone https://github.com/backtrackbaba/covid-api.git`
+
+### Setup a new Python Environment and source it
+
+Python version 3.6+ would be required to run the project
+```
+virtualenv -p python3 path/for/environment/covid
+
+source path/for/environment/covid/bin/activate
+```
+
+### Set and source the env file
+```
+cd path/to/cloned/project
+
+# Change the values of env as per your local setup using example.env
+
+source .env
+```
+
+### Starting application
+```
+cd path/to/cloned/project
+
+flask run
+```
+
+
 
 # Sources
 
