@@ -1,17 +1,21 @@
 from operator import and_
 
-from sqlalchemy import asc, desc
+from sqlalchemy import asc
 
 from app import cache
 from app.api.v1 import bp
+from app.api.v1.services.common_service import CommonService
+from app.api.v1.services.world_service import WorldService
 from app.models import Records
 
 
 @bp.route('/global')
 @cache.cached(timeout=86400, metrics=True)
 def world():
-    date = Records.query.filter(Records.country_iso == "IND").order_by(desc(Records.date)).first().date
-    results = Records.query.filter(Records.date == date).all()
+    world_service = WorldService()
+    common_service = CommonService()
+    date = common_service.get_latest_date()
+    results = world_service.get_global_count()
     global_confirmed_count, global_death_count, global_recovered_count = 0, 0, 0
     for result in results:
         global_confirmed_count += result.confirmed
@@ -29,11 +33,13 @@ def world():
 @cache.cached(timeout=86400, metrics=True)
 @bp.route('/global/count')
 def global_count():
-    dates = Records.query.distinct(Records.date).all()
+    common_service = CommonService()
+    world_service = WorldService()
+    dates = common_service.get_all_dates()
     date_result = {}
     for entry in dates:
         date = entry.date
-        results = global_count_on_date(date)
+        results = world_service.get_global_count_on_date(date)
         global_confirmed_count, global_death_count, global_recovered_count = 0, 0, 0
         for result in results:
             global_confirmed_count += result.confirmed
