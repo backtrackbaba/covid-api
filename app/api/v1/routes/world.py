@@ -1,16 +1,12 @@
-from operator import and_
-
-from sqlalchemy import asc
-
 from app import cache
 from app.api.v1 import bp
 from app.api.v1.services.common_service import CommonService
+from app.api.v1.services.country_service import CountryService
 from app.api.v1.services.world_service import WorldService
-from app.models import Records
 
 
 @bp.route('/global')
-@cache.cached(timeout=86400, metrics=True)
+@cache.cached()
 def world():
     world_service = WorldService()
     common_service = CommonService()
@@ -30,7 +26,7 @@ def world():
     return data
 
 
-@cache.cached(timeout=86400, metrics=True)
+@cache.cached()
 @bp.route('/global/count')
 def global_count():
     common_service = CommonService()
@@ -57,10 +53,30 @@ def global_count():
     return data
 
 
+@bp.route('/global/latest')
+def global_latest():
+    common_service = CommonService()
+    world_service = WorldService()
+    latest_date = common_service.get_latest_date()
+    results = world_service.get_global_count_on_date(str(latest_date))
+    data = {
+        'count': len(results),
+        'result': [],
+        'date': str(latest_date)
+    }
+    for result in results:
+        country_data = {}
+        country_data[result.country_iso] = {"confirmed": result.confirmed, "deaths": result.deaths,
+                                            "recovered": result.recovered}
+        data['result'].append(country_data)
+    return data
+
+
 @bp.route('/global/<date>')
-@cache.cached(timeout=86400, metrics=True)
+@cache.cached()
 def world_date(date):
-    results = Records.query.filter(Records.date == date).all()
+    world_service = WorldService()
+    results = world_service.get_global_count_on_date(date)
     global_confirmed_count, global_death_count, global_recovered_count = 0, 0, 0
     for result in results:
         global_confirmed_count += result.confirmed
@@ -76,10 +92,11 @@ def world_date(date):
 
 
 @bp.route('/global/<from_date>/<to_date>')
-@cache.cached(timeout=86400, metrics=True)
+@cache.cached()
 def world_date_window(from_date, to_date):
-    from_date_result = Records.query.filter(Records.date == from_date).all()
-    to_date_result = Records.query.filter(Records.date == to_date).all()
+    world_service = WorldService()
+    from_date_result = world_service.get_global_count_on_date(from_date)
+    to_date_result = world_service.get_global_count_on_date(to_date)
     from_date_confirmed_count, from_date_death_count, from_date_recovered_count = 0, 0, 0
     to_date_confirmed_count, to_date_death_count, to_date_recovered_count = 0, 0, 0
 
@@ -106,37 +123,20 @@ def world_date_window(from_date, to_date):
 
 
 @bp.route('/global/timeseries/<from_date>/<to_date>')
-@cache.cached(timeout=86400, metrics=True)
+@cache.cached()
 def global_timeseries(from_date, to_date):
+    country_service = CountryService()
     result = {}
-    country_list = Records.query.distinct(Records.country_iso).all()
+    country_list = country_service.get_all_countries()
     data = {
         'count': len(country_list),
         'result': result
     }
     for country in country_list:
-        country_result = get_country_time_series(country.country_iso, from_date, to_date)
+        country_result = country_service.get_country_timeseries(country.country_iso, from_date, to_date)
         data_list = []
         for entry in country_result:
             data_list.append({"date": str(entry.date), "confirmed": entry.confirmed, "deaths": entry.deaths,
                               "recovered": entry.recovered})
         result[country.country_iso] = data_list
     return data
-
-
-########################################################################################################################
-
-# Internal Functions to be taken out into utils
-
-########################################################################################################################
-@cache.cached(timeout=86400, metrics=True)
-def get_country_time_series(country_iso, from_date, to_date):
-    result = Records.query.filter(Records.country_iso == country_iso).filter(
-        and_(Records.date >= from_date, Records.date < to_date)).order_by(asc(Records.date)).all()
-    return result
-
-
-@cache.cached(timeout=86400, metrics=True)
-def global_count_on_date(date):
-    result = Records.query.filter(Records.date == date).all()
-    return result
