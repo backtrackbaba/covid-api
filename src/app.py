@@ -316,3 +316,17 @@ def update_db():
 def clear_redis():
     redis_db.flushdb()
     return "Cleared Redis!!!"
+
+
+@app.route('/protected/redis-info')
+@basic_auth.required
+def redis_info():
+    info = redis_db.info()
+    data = {
+        "memory": info.get("used_memory_human"),
+        "db": info.get(f"db{os.environ.get('CACHE_REDIS_DB')}"),
+        "commands_processed": info.get("total_commands_processed"),
+        "keyspace_hits": info.get("keyspace_hits"),
+        "keyspace_misses": info.get("keyspace_misses")
+    }
+    return data
