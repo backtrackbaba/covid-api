@@ -16,10 +16,10 @@ The API's consume & return dates as per [ISO 8601](https://en.wikipedia.org/wiki
 There's no authentication required. Anybody and everybody is welcome to use this widely.
 
 # Rate limit
-There is no rate limit of any kind but we hope that you use it in a sensible manner and whenever possible cache response for a few hours as the underlying API's are updated thrice a day.
+There is no rate limit of any kind but we hope that you use it in a sensible manner and whenever possible cache response for a few hours as the underlying API's are updated ~~thrice a day~~ daily.
 
 # Updation
-The datasets are updated thrice a day. As of now, we manually trigger the updation of our API's as we don't have any downstream notification's sent on updation. We are also working on having a notification mechanism in place to support all the consumers of the API. PR's are always welcome!
+The datasets are updated ~~thrice a day~~ daily. As of now, we manually trigger the updation of our API's as we don't have any downstream notification's sent on updation. We are also working on having a notification mechanism in place to support all the consumers of the API. PR's are always welcome!
 
 # Documentation
 Postman collection has been created along with documentation for you to get started with this project. Docs can be found [here](https://documenter.getpostman.com/view/2568274/SzS8rjbe?version=latest)
