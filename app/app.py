@@ -5,7 +5,7 @@ import uuid
 from operator import and_
 
 import requests
-from flask import Flask, render_template
+from flask import Flask, render_template, abort
 from flask_basicauth import BasicAuth
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -56,6 +56,8 @@ def home():
 @cache.cached(timeout=86400, metrics=True)
 def country(country_iso):
     result = Records.query.filter_by(country_iso=country_iso.upper()).all()
+    if len(result) == 0:
+        abort(404)
     data = {
         'count': len(result),
         'result': {}
@@ -84,6 +86,8 @@ def country_date(country_iso, date):
 def country_timeseries(country_iso, from_date, to_date):
     results = Records.query.filter(Records.country_iso == country_iso).filter(
         and_(Records.date >= from_date, Records.date < to_date)).order_by(asc(Records.date)).all()
+    if len(results) == 0:
+        abort(404)
     data_list = []
     for result in results:
         data_list.append({"date": str(result.date), "confirmed": result.confirmed, "deaths": result.deaths,
@@ -124,7 +128,11 @@ def global_timeseries(from_date, to_date):
 
 @cache.cached(timeout=86400, metrics=True)
 def fetch_country_on_date(country_iso, date):
-    return Records.query.filter(Records.country_iso == country_iso).filter(Records.date == date).first()
+    result = Records.query.filter(Records.country_iso == country_iso).filter(Records.date == date).first()
+    if not result:
+        abort(404)
+    else:
+        return result
 
 
 @app.route('/api/v1/global')
@@ -308,3 +316,17 @@ def update_db():
 def clear_redis():
     redis_db.flushdb()
     return "Cleared Redis!!!"
+
+
+@app.route('/protected/redis-info')
+@basic_auth.required
+def redis_info():
+    info = redis_db.info()
+    data = {
+        "memory": info.get("used_memory_human"),
+        "db": info.get(f"db{os.environ.get('CACHE_REDIS_DB')}"),
+        "commands_processed": info.get("total_commands_processed"),
+        "keyspace_hits": info.get("keyspace_hits"),
+        "keyspace_misses": info.get("keyspace_misses")
+    }
+    return data
