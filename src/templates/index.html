@@ -1,23 +1,194 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Covid19 API</title>
+
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shards.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 </head>
-<body>
-<h1>Covid19 API</h1>
 
-<h3>Thank you for the interest in the project.</h3>
+<body id="page-top">
 
-<h4>The documentation for the endpoints along with the Postman collection can be found <a
-        href="https://documenter.getpostman.com/view/2568274/SzS8rjbe?version=latest" class="href">here</a>.</h4>
-<h4>The project is opensource and the source code is available on <a href="https://github.com/backtrackbaba/covid-api"
-                                                                     class="href">GitHub</a></h4>
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">
+            <img src="{{ url_for('static', filename='images/covidapi-logo-wo-text-tpnt.png') }}" alt=""
+                 width="50px">
+            <span class="text-uppercase font-weight-bold pl-3">CovidAPI</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#intro">Intro</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#how-to">How To Use</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#examples">Examples</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#local-setup">Local Setup</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#faqs">FAQ's</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#sources">Sources</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link js-scroll-trigger" href="#contributors">Contributors</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<h4>Please raise a pull request on <a href="https://github.com/backtrackbaba/covid-api"
-                                      class="href">GitHub</a> for any contribution, suggestion or feedback</h4>
+
+<header class="masthead text-center text-white">
+    <div class="masthead-content">
+        <div class="container">
+            <h1 class="masthead-heading font-weight-bold">Welcome to CovidAPI.info! 🦠</h1>
+            <p class="lead mt-4">Easy to use ✔️, blazingly fast ⚡ REST APIs 📦 with daily updated global data 📈</p>
+            <a href="#intro" class="btn btn-primary btn-pill btn-lg mt-5 js-scroll-trigger" role="button">Get
+                Started</a>
+        </div>
+    </div>
+    <div class="bg-circle-1 bg-circle"></div>
+    <div class="bg-circle-2 bg-circle"></div>
+    <div class="bg-circle-3 bg-circle"></div>
+    <div class="bg-circle-4 bg-circle"></div>
+</header>
+
+<section id="intro">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h3 class="mb-4">Getting Started</h3>
+                <p class="lead">This project builds upon the dataset of <a
+                        href="https://github.com/CSSEGISandData/COVID-19" class="href" target="_blank">John
+                    Hopkins
+                    University</a> in CSV form which was
+                    converted to JSON Time Series format by <a href="https://github.com/pomber/covid19" class="href"
+                                                               target="_blank">pomber</a>.</p>
+
+                <p class="lead">Our project intends to make that set queryable in a manner in which it could be easily
+                    consumed to build public dashboards.</p>
+            </div>
+
+            <div class="features py-4 mb-4">
+                <div class="container">
+                    <div class="row">
+                        <div class="feature py-4 col-md-6 d-flex">
+                            <div class="feature-icon text-primary mr-3"><i class="fa fa-paint-brush"></i></div>
+                            <div class="px-4">
+                                <h5>Free</h5>
+                                <p>Free access gives you the ability to build anything and everything with our APIs</p>
+                            </div>
+                        </div>
+                        <div class="feature py-4 col-md-6 d-flex">
+                            <div class="feature-icon text-primary mr-3"><i class="fa fa-code"></i></div>
+                            <div class="px-4">
+                                <h5>No Rate Limiting</h5>
+                                <p>Quisque mollis mi ac aliquet accumsan. Sed sed dapibus libero. Nullam luctus purus
+                                    duis sensibus signiferumque.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="feature py-4 col-md-6 d-flex">
+                            <div class="feature-icon text-primary mr-3"><i class="fa fa-font"></i></div>
+                            <div class="px-4">
+                                <h5>Ultra Fast</h5>
+                                <p>Quisque mollis mi ac aliquet accumsan. Sed sed dapibus libero. Nullam luctus purus
+                                    duis sensibus signiferumque.</p>
+                            </div>
+                        </div>
+                        <div class="feature py-4 col-md-6 d-flex">
+                            <div class="feature-icon text-primary mr-3"><i class="fa fa-support"></i></div>
+                            <div class="px-4">
+                                <h5>JSON</h5>
+                                <p>Quisque mollis mi ac aliquet accumsan. Sed sed dapibus libero. Nullam luctus purus
+                                    duis sensibus signiferumque.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section id="how-to" class="bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h3 class="mb-4">How to Use</h3>
+                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut optio velit inventore,
+                    expedita quo laboriosam possimus ea consequatur vitae, doloribus consequuntur ex. Nemo assumenda
+                    laborum vel, labore ut velit dignissimos.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="examples">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2>Contact us</h2>
+                <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vero odio fugiat voluptatem
+                    dolor, provident officiis, id iusto! Obcaecati incidunt, qui nihil beatae magnam et repudiandae ipsa
+                    exercitationem, in, quo totam.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="py-5 bg-dark">
+    <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+    </div>
+    <!-- /.container -->
+</footer>
+
+
+<!-- Optional JavaScript -->
+<!-- JavaScript Dependencies: jQuery, Popper.js, Bootstrap JS, Shards JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+
+<script src="{{ url_for('static', filename='js/shards.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/scrolling-nav.js') }}"></script>
+
+
 </body>
 </html>

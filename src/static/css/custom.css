@@ -1,0 +1,109 @@
+/*!
+ * Start Bootstrap - Scrolling Nav (https://startbootstrap.com/template-overviews/scrolling-nav)
+ * Copyright 2013-2019 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-scrolling-nav/blob/master/LICENSE)
+ */
+header {
+  padding: 156px 0 100px;
+}
+
+section {
+  padding: 150px 0;
+}
+
+
+/* FROM: https://github.com/BlackrockDigital/startbootstrap-one-page-wonder/blob/master/css/one-page-wonder.css  */
+
+header.masthead {
+  position: relative;
+  overflow: hidden;
+  padding-top: calc(7rem + 72px);
+  padding-bottom: 7rem;
+  /*background: linear-gradient(0deg, #ff6a00 0%, #ee0979 100%);*/
+  /*background-image: linear-gradient(to top, #fbc2eb 0%, #a6c1ee 100%);*/
+  background-image: linear-gradient(to right, #43e97b 0%, #38f9d7 100%);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: scroll;
+  background-size: cover;
+}
+
+
+header.masthead .masthead-content {
+  z-index: 1;
+  position: relative;
+}
+
+header.masthead .masthead-content .masthead-heading {
+  font-size: 3rem;
+}
+
+header.masthead .masthead-content .masthead-subheading {
+  font-size: 2rem;
+}
+
+header.masthead .bg-circle {
+  z-index: 0;
+  position: absolute;
+  border-radius: 100%;
+  /*background: linear-gradient(0deg, #ee0979 0%, #ff6a00 100%);*/
+  /*background-image: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);*/
+  background-image: linear-gradient(180deg, #2af598 0%, #009efd 100%);
+
+}
+
+header.masthead .bg-circle-1 {
+  height: 90rem;
+  width: 90rem;
+  bottom: -55rem;
+  left: -55rem;
+}
+
+header.masthead .bg-circle-2 {
+  height: 50rem;
+  width: 50rem;
+  top: -25rem;
+  right: -25rem;
+}
+
+header.masthead .bg-circle-3 {
+  height: 20rem;
+  width: 20rem;
+  bottom: -10rem;
+  right: 5%;
+}
+
+header.masthead .bg-circle-4 {
+  height: 30rem;
+  width: 30rem;
+  top: -5rem;
+  right: 35%;
+}
+
+@media (min-width: 992px) {
+  header.masthead {
+    padding-top: calc(10rem + 55px);
+    padding-bottom: 10rem;
+  }
+
+  header.masthead .masthead-content .masthead-heading {
+    font-size: 3rem;
+  }
+
+  header.masthead .masthead-content .masthead-subheading {
+    font-size: 3rem;
+  }
+}
+
+
+/* Shards landing page*/
+
+.feature-icon {
+  border-radius: 50%;
+  min-width: 65px;
+  height: 65px;
+  line-height: 65px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(33, 37, 41, .1), 0 7px 14px rgba(33, 37, 41, .1);
+  font-size: 27px
+}

@@ -47,7 +47,7 @@ class Records(db.Model):
 
 
 @app.route('/')
-@cache.cached(timeout=86400, metrics=True)
+# @cache.cached(timeout=86400, metrics=True)
 def home():
     return render_template('index.html')
 
