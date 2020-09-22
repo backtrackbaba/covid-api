@@ -278,6 +278,7 @@ def global_latest():
 @basic_auth.required
 def update_db():
     t1 = time.time()
+    record_counter = 0
     # Fetch the latest dataset
     master_data_url = "https://pomber.github.io/covid19/timeseries.json"
     country_name_to_iso_file = DATA_DIR + '/country_name_to_iso.json'
@@ -291,24 +292,27 @@ def update_db():
     db.session.commit()
 
     for country in countries:
+        country_records = []
         for everyday in master_data_json[country]:
-            record = Records()
-            record.uuid = uuid.uuid4()
-            record.country_name = country
-            record.country_iso = country_name_to_code.get(country)
-            record.date = everyday["date"]
-            record.confirmed = everyday["confirmed"]
-            record.deaths = everyday["deaths"]
-            record.recovered = everyday["recovered"] or 0
-            db.session.add(record)
-            print("Record Object", record)
-            db.session.commit()
-            print(record)
-            print(f"Successfully added record for {country}")
+            everyday_record = {
+                "uuid": uuid.uuid4(),
+                "country_name": country,
+                "country_iso": country_name_to_code.get(country),
+                "date": everyday["date"],
+                "confirmed": everyday["confirmed"],
+                "deaths": everyday["deaths"],
+                "recovered": everyday["recovered"] or 0,
+            }
+            country_records.append(everyday_record)
+
+        db.session.bulk_insert_mappings(Records, country_records)
+        db.session.commit()
+        print(f"Added record for {country}")
+        record_counter += len(country_records)
 
     redis_db.flushdb()
     print(f"Added records for {len(countries)} countries!")
-    return f"Added records in {time.time() - t1} seconds!"
+    return f"Added {record_counter} records in {time.time() - t1} seconds!"
 
 
 @app.route('/protected/clear-redis')
