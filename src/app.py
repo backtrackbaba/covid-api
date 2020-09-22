@@ -274,6 +274,8 @@ def global_latest():
     return data
 
 
+@app.route('/protected/update-db')
+@basic_auth.required
 def update_db():
     t1 = time.time()
     record_counter = 0
