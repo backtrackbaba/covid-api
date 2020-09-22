@@ -13,6 +13,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
   NUM_WORKERS=3
 fi
 
+NUM_WORKERS=3
 NUM_THREADS=$((4 * $NUM_WORKERS))
 
 WSGI_MODULE=wsgi

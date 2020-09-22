@@ -272,7 +272,7 @@ def global_latest():
                                             "recovered": result.recovered}
         data['result'].append(country_data)
     return data
-
+s
 
 @app.route('/protected/update-db')
 @basic_auth.required
