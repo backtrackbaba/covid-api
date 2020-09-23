@@ -1,8 +1,8 @@
 #!/bin/bash
 
 NAME="libdb"
-PROJECT_SRC="/opt/covid/covid-api/src"
-LOGFILE="/opt/covid/data/logs/gunicorn/gunicorn.log"
+PROJECT_SRC="/opt/projects/covid/apps/service/covid-api/src"
+LOGFILE="/opt/projects/covid/data/logs/gunicorn/gunicorn.log"
 
 USER=$(whoami)
 GROUP=$(id -g -n)
@@ -20,10 +20,10 @@ WSGI_MODULE=wsgi
 
 cd $PROJECT_SRC
 
-source /opt/covid/runtime-environments/python/bin/activate
-source /opt/covid/covid-devops/environments/.env
+source /opt/projects/covid/runtime-environments/python/bin/activate
+source /opt/projects/covid/devops/covid-devops/environments/.env
 
-export PYTHONPATH="/opt/covid/covid-api/src"
+export PYTHONPATH=$PROJECT_SRC
 
 export FLASK_ENV=production
 export FLASK_APP=app
