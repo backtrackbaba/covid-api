@@ -20,7 +20,7 @@ WSGI_MODULE=wsgi
 
 cd $PROJECT_SRC
 
-source /opt/projects/covid/runtime-environments/python/bin/activate
+source /opt/projects/covid/runtime-environments/covid/bin/activate
 source /opt/projects/covid/devops/covid-devops/environments/.env
 
 export PYTHONPATH=$PROJECT_SRC
