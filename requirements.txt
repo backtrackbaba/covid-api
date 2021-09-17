@@ -8,6 +8,6 @@ requests==2.23.0
 click==7.1.1
 walrus==0.8.0
 gunicorn[gthread]==20.0.4
-flask-cors==3.0.8
+flask-cors==3.0.9
 Flask-BasicAuth==0.2.0
 
