@@ -1,7 +1,7 @@
 # Covid API
 
 # Introduction
-This project builds upon the dataset of [John Hopkins University](https://github.com/CSSEGISandData/COVID-19) in CSV form which was converted to JSON Time Series format by [pomber](https://github.com/pomber/covid19).
+This project builds upon the dataset of [Johns Hopkins University](https://github.com/CSSEGISandData/COVID-19) in CSV form which was converted to JSON Time Series format by [pomber](https://github.com/pomber/covid19).
 
 Our project intends to make that set queryable in a manner in which it could be easily consumed to build public dashboards. 
 
